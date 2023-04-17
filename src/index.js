@@ -16,8 +16,8 @@ app.use((req, res) => {
     return res.status(400).send({ status: false, message: "End point is incorrect" })
 });
 
-const PORT = 3000
 
-app.listen(PORT, () => {
-    console.log(`Express app is running on port ${PORT}`)
+app.listen(process.env.PORT ||3000, function(){
+    console.log("express app running on port "+(process.env.port||3000))
 })
+
