@@ -1,15 +1,17 @@
 const likeModel = require('../models/likeModel');
 const postModel = require('../models/postModel');
 const commentModel = require('../models/commentModel');
+let mongoose=require("mongoose")
+let ObjectId=mongoose.Schema.Types.ObjectId
 // Create a new post
 let createPost = async function(req, res)  {
   try {
     let {Title,Description} = req.body;
    if(!Title){
-    res.status(400).send({error:"Title is missing"})
+    res.status(400).send({msg:"Title is missing"})
    }
    if(!Description){
-    res.status(400).send({error:"Description is missing"})
+    res.status(400).send({msg:"Description is missing"})
    }
     let userId=req.userId
     let postData={
@@ -19,9 +21,9 @@ let createPost = async function(req, res)  {
     }
     let savedPost = await postModel.create(postData)
    let post={
+    _id:savedPost._id,
     Title:savedPost.Title,
     Description:savedPost.Description,
-    _id:savedPost._id,
     createdAt:savedPost.createdAt
    }
     res.status(201).send(post);
@@ -47,7 +49,7 @@ let getPostById = async function(req, res) {
     const userId=req.params.userID
     const post = await postModel.findOne(userId).populate('comments');
     if (!post) {
-      return res.status(404).send({ error: 'Post not found' });
+      return res.status(404).send({ msg: 'Post not found' });
     }
     res.status(200).send(post);
   } catch (err) {
@@ -56,24 +58,27 @@ let getPostById = async function(req, res) {
 };
 
 // Delete a post by ID
-let deletePostById = async function(req, res)  {
+let deletePostById =async function(req, res)  {
   try {
     const postId=req.params.id;
     const userId=req.userId;
 
     const post = await postModel.findById(postId);
     if (!post) {
-      return res.status(404).send({ error: 'Post not found' });
+      return res.status(404).send({ msg: 'Post not found' });
     }
+   
     if(post.authorId!=userId){
-      return res.status(400).send({ error: 'you are not authorised to delete the post' });
+      return res.status(400).send({ msg: 'you are not authorised to delete the post' });
     }
     likeModel.deleteMany({postId:postId})
    commentModel.deleteMany({postId:postId})
-    postModel.deleteOne({ _id:postId})
-    res.status(200).send({msg:"data deleted successful"});
+  await postModel.deleteOne({_id:postId})
+
+      res.status(200).send({ msg:"post deleted successfulluy" });
+    
   } catch (err) {
-    res.status(500).send({ error: 'Failed to delete post' });
+    res.status(500).send({ error: err.massage });
   }
 };
 

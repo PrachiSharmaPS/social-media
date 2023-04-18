@@ -16,12 +16,12 @@ let data={
 }
 await likeModel.create(data)
 
-let postData=await postModel.findOneAndUpdate(postId,
+let postData=await postModel.findOneAndUpdate({_id:postId},
   { $inc: { likes: 1 } },
     { new: true }
   );
 
-  res.status(200).send({post:postData})
+  res.status(200).send({msg:"Post is Liked"})
 }catch(err){
   res.status(500).send({error:err.massage})
 }
@@ -38,12 +38,12 @@ if(!likeData){
  return res.status(400).send({msg:"post is already unlike"})
 }
 
-let postData=await postModel.findOneAndUpdate(postId,
+let postData=await postModel.findOneAndUpdate({_id:postId},
   { $inc: { likes: -1 } },
     { new: true }
   );
 
-  res.status(200).send({post:postData})
+  res.status(200).send({msg:"Post is Unliked "})
 }catch(err){
   res.status(500).send({error:err.massage})
 }
