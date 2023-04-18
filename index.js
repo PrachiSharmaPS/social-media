@@ -11,7 +11,7 @@ mongoose.connect("mongodb+srv://PrachiSharma:H5dAJbvR7AIla7bk@newproject.ufw9pum
     .then(() => console.log("MongoDb is connected"))
     .catch((err) => console.log(err))
 
-app.use("https://socialmediaapplication-z0kw.onrender.com/", route)
+app.use("/", route)
 app.use((req, res) => {
     return res.status(400).send({ status: false, message: "End point is incorrect" })
 });
