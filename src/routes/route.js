@@ -4,7 +4,7 @@ const router=express.Router()
 const {signup,login,getUser}=require("../controllers/userController")
 const {likePost,unlikePost}=require("../controllers/likeController")
 const {createPost,getAllPosts,getPostById,deletePostById}=require("../controllers/postController")
-const {createComment,}=require("../controllers/commentController")
+const {createComment}=require("../controllers/commentController")
 const {followUser,unfollowUser}=require("../controllers/followController")
 const {authenticate}=require("../middleware/middleware")
 
